@@ -1,8 +1,7 @@
 package com.lam.javarestapi.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lam.javarestapi.util.PhoneNumber;
-import com.lam.javarestapi.util.UserStatus;
+import com.lam.javarestapi.util.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -12,6 +11,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import static com.lam.javarestapi.util.Gender.*;
 
 public class UserRequestDTO implements Serializable {
     @NotBlank(message = "firtName not be must blank")
@@ -26,9 +27,16 @@ public class UserRequestDTO implements Serializable {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "MM/dd/yyyy")
     private Date birthDate;
-    private UserStatus status;
+    @EnumPattern(name = "status", regexp = "ACTIVE|INACTIVE|NONE")
+    private UserStatus status1;
+    @GenderSubset(anyOf = {MALE,FEMALE,OTHER})
+    private Gender gender;
     @NotEmpty
     List<String> permission;
+    @NotNull(message = "type must be not null")
+    @EnumValue(name = "type", enumClass = UserType.class)
+    private String type;
+
 
     public UserRequestDTO(String firstName, String lastName, String phone, String email) {
         this.firstName = firstName;
@@ -60,5 +68,17 @@ public class UserRequestDTO implements Serializable {
 
     public String getEmail() {
         return email;
+    }
+
+    public UserStatus getStatus1() {
+        return status1;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public String getType() {
+        return type;
     }
 }
