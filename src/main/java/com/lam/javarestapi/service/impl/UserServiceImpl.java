@@ -7,6 +7,7 @@ import com.lam.javarestapi.dto.response.UserDetailResponse;
 import com.lam.javarestapi.exception.ResourceNotFoundException;
 import com.lam.javarestapi.model.Address;
 import com.lam.javarestapi.model.User;
+import com.lam.javarestapi.repository.SearchRepository;
 import com.lam.javarestapi.repository.UserRepository;
 import com.lam.javarestapi.service.UserService;
 import com.lam.javarestapi.util.UserStatus;
@@ -32,6 +33,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final SearchRepository searchRepository;
 
     @Override
     public long saveUser(UserRequestDTO request) {
@@ -175,6 +177,16 @@ public class UserServiceImpl implements UserService {
                 .items(responses)
                 .build();
 
+    }
+
+    @Override
+    public PageResponse<?> getAllUsersWithSortByWithColumnAndSearch(int pageNo, int pageSize, String search, String sortBy) {
+        return searchRepository.getAllUsersWithSortByWithColumnAndSearch(pageNo, pageSize, search, sortBy);
+    }
+
+    @Override
+    public PageResponse<?> advanceSearchByCriteria(int pageNo, int pageSize, String sortBy, List<String> address, String... search) {
+        return searchRepository.advanceSearchUser(pageNo, pageSize, sortBy, address, search);
     }
 
     private Set<Address> convertToAddress(Set<AddressDTO> addresses) {

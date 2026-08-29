@@ -12,7 +12,8 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "tbl_address")
+@Entity(name = "Address")
+@Table(name = "tbl_address")
 public class Address extends AbstractEntity {
 
 

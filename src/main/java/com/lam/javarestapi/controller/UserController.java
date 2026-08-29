@@ -106,4 +106,25 @@ public class UserController {
         return new ResponseData<>(HttpStatus.OK.value(), "users", userService.getAllUsersWithSortByWithMultipleColumns(pageNo, pageSize, sorts));
     }
 
+    @GetMapping("/list-with-multiple-conlumn-search")
+    public ResponseData<PageResponse<?>> getAllUsersWithSortByWithColumnAndSearch(@RequestParam(defaultValue = "0", required = false) int pageNo,
+                                                                                  @Min(10) @RequestParam(defaultValue = "20", required = false) int pageSize,
+                                                                                  @RequestParam(required = false) String search,
+                                                                                  @RequestParam(required = false) String sortBy) {
+
+        log.info("Request get all of user sort by column and search ");
+        return new ResponseData<>(HttpStatus.OK.value(), "users", userService.getAllUsersWithSortByWithColumnAndSearch(pageNo, pageSize, search, sortBy));
+    }
+
+    @GetMapping("/advance-search-by-criteria")
+    public ResponseData<PageResponse<?>> advanceSearchByCriteria(@RequestParam(defaultValue = "0", required = false) int pageNo,
+                                                                 @Min(10) @RequestParam(defaultValue = "20", required = false) int pageSize,
+                                                                 @RequestParam(required = false) String sortBy,
+                                                                 @RequestParam(required = false) List<String> address,
+                                                                 @RequestParam(required = false) String... search) {
+
+        log.info("Request get advance search by criteria");
+        return new ResponseData<>(HttpStatus.OK.value(), "users", userService.advanceSearchByCriteria(pageNo, pageSize, sortBy, address, search));
+    }
+
 }

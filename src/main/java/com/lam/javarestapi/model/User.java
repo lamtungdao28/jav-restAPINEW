@@ -1,5 +1,6 @@
 package com.lam.javarestapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lam.javarestapi.util.Gender;
 import com.lam.javarestapi.util.UserStatus;
 import com.lam.javarestapi.util.UserType;
@@ -19,7 +20,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "tbl_user")
+@Entity(name = "User")
+@Table(name = "tbl_user")
 public class User extends AbstractEntity {
 
 
@@ -60,7 +62,8 @@ public class User extends AbstractEntity {
     @Column(name = "status")
     private UserStatus status;
 
-    @Builder.Default
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<Address> addresses = new HashSet<>();
 

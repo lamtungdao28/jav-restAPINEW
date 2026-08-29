@@ -5,6 +5,8 @@ import com.lam.javarestapi.dto.response.PageResponse;
 import com.lam.javarestapi.dto.response.UserDetailResponse;
 import com.lam.javarestapi.util.UserStatus;
 
+import java.util.List;
+
 public interface UserService {
 
     long saveUser(UserRequestDTO request);
@@ -20,5 +22,9 @@ public interface UserService {
     PageResponse<?> getAllUsersWithSortBy(int pageNo, int pageSize, String sortBy);
 
     PageResponse<?> getAllUsersWithSortByWithMultipleColumns(int pageNo, int pageSize, String... sorts);
+
+    PageResponse<?> getAllUsersWithSortByWithColumnAndSearch(int pageNo, int pageSize, String search, String sortBy);
+
+    PageResponse<?> advanceSearchByCriteria(int pageNo, int pageSize, String sortBy, List<String> address, String... search);
 
 }
