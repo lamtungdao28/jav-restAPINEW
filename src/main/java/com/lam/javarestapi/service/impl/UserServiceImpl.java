@@ -9,7 +9,10 @@ import com.lam.javarestapi.model.Address;
 import com.lam.javarestapi.model.User;
 import com.lam.javarestapi.repository.SearchRepository;
 import com.lam.javarestapi.repository.UserRepository;
+import com.lam.javarestapi.repository.specification.UserSpec;
+import com.lam.javarestapi.repository.specification.UserSpecificationBuilder;
 import com.lam.javarestapi.service.UserService;
+import com.lam.javarestapi.util.Gender;
 import com.lam.javarestapi.util.UserStatus;
 import com.lam.javarestapi.util.UserType;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -187,6 +191,46 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageResponse<?> advanceSearchByCriteria(int pageNo, int pageSize, String sortBy, List<String> address, String... search) {
         return searchRepository.advanceSearchUser(pageNo, pageSize, sortBy, address, search);
+    }
+
+    @Override
+    public PageResponse<?> advanceSearchWithSpecification(Pageable pageable, String[] user, String[] address) {
+        Page<User> users = null;
+        Specification<User> spec = Specification.unrestricted();
+        List<User> list = new ArrayList<>();
+        if (user != null && address != null) {
+            return searchRepository.getUserJoinAddress(pageable.getPageNumber(), pageable.getPageSize(), user, address);
+         
+        } else if (user != null) {
+//                spec = UserSpec.hasFirstName("T");
+//                Specification<User> genderSpec = UserSpec.notEquaGender(Gender.MALE);
+//                Specification<User> finalSpec = spec.and(genderSpec);
+
+            UserSpecificationBuilder builder = new UserSpecificationBuilder();
+            for (String s : user) {
+                Pattern pattern = Pattern.compile("(\\w+?)([<:>~!])(.*)(\\p{Punct}?)(\\p{Punct}?)");
+                Matcher matcher = pattern.matcher(s);
+                if (matcher.find()) {
+                    builder.with(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
+                }
+            }
+            list = userRepository.findAll(builder.build());
+            return PageResponse.builder()
+                    .pageNo(pageable.getPageNumber())
+                    .pageSize(pageable.getPageSize())
+                    .totalPage(10)
+                    .items(list)
+                    .build();
+
+        } else {
+            users = userRepository.findAll(pageable);
+        }
+        return PageResponse.builder()
+                .pageNo(pageable.getPageNumber())
+                .pageSize(pageable.getPageSize())
+                .totalPage(users.getTotalPages())
+                .items(users)
+                .build();
     }
 
     private Set<Address> convertToAddress(Set<AddressDTO> addresses) {

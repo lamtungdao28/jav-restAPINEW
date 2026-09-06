@@ -13,6 +13,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.query.Page;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -125,6 +126,15 @@ public class UserController {
 
         log.info("Request get advance search by criteria");
         return new ResponseData<>(HttpStatus.OK.value(), "users", userService.advanceSearchByCriteria(pageNo, pageSize, sortBy, address, search));
+    }
+
+    @GetMapping("/advance-search-with-specification")
+    public ResponseData<PageResponse<?>> advanceSearchWithSpecification(Pageable pageable,
+                                                                        @RequestParam(required = false) String[] user,
+                                                                        @RequestParam(required = false) String[] address) {
+
+        log.info("Request get advance search by criteria");
+        return new ResponseData<>(HttpStatus.OK.value(), "users", userService.advanceSearchWithSpecification(pageable, user, address));
     }
 
 }
