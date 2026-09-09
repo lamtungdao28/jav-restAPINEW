@@ -22,6 +22,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -38,6 +42,12 @@ import java.util.regex.Pattern;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SearchRepository searchRepository;
+
+
+    @Override
+    public UserDetailsService userDetailService() {
+        return username -> userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("username not found"));
+    }
 
     @Override
     public long saveUser(UserRequestDTO request) {
@@ -200,7 +210,7 @@ public class UserServiceImpl implements UserService {
         List<User> list = new ArrayList<>();
         if (user != null && address != null) {
             return searchRepository.getUserJoinAddress(pageable.getPageNumber(), pageable.getPageSize(), user, address);
-         
+
         } else if (user != null) {
 //                spec = UserSpec.hasFirstName("T");
 //                Specification<User> genderSpec = UserSpec.notEquaGender(Gender.MALE);

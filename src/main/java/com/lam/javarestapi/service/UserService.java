@@ -5,10 +5,14 @@ import com.lam.javarestapi.dto.response.PageResponse;
 import com.lam.javarestapi.dto.response.UserDetailResponse;
 import com.lam.javarestapi.util.UserStatus;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
 public interface UserService {
+
+    UserDetailsService userDetailService();
 
     long saveUser(UserRequestDTO request);
 

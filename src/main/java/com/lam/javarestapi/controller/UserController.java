@@ -11,6 +11,7 @@ import com.lam.javarestapi.util.UserStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.query.Page;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
