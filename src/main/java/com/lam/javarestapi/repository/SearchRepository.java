@@ -93,6 +93,7 @@ public class SearchRepository {
 
             for (String s : search) {
                 Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(.*)");
+
                 Matcher matcher = pattern.matcher(s);
                 if (matcher.find()) {
                     searchCriteriaList.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));

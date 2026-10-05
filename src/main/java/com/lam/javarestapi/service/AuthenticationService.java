@@ -24,6 +24,8 @@ public class AuthenticationService {
         User user = userRepository.findByUsername(signInRequest.getUsername()).orElseThrow(() -> new UsernameNotFoundException("username or password incorrect"));
 
         String accessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
         return TokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken("refresh_token")

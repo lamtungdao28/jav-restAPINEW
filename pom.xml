@@ -79,7 +79,7 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
             <version>0.13.0</version>
-         
+            
         </dependency>
         <!-- JSON Processor (Jackson) -->
         <dependency>

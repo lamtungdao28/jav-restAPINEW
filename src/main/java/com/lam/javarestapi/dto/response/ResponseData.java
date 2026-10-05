@@ -1,6 +1,10 @@
 package com.lam.javarestapi.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
 
 public class ResponseData<T> {
     private final int status;
@@ -19,15 +23,5 @@ public class ResponseData<T> {
         this.status = status;
     }
 
-    public int getStatus() {
-        return status;
-    }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public T getData() {
-        return data;
-    }
 }
